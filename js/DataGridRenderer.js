@@ -247,8 +247,17 @@ var DataGridRenderer = {
       } else {
         outputText += '{ ';
         for (var j = initialJ; j < numColumns; j++) {
-          if (j > initialJ) outputText += ', ';
-          outputText += '"' + headerNames[j] + '"' + ":" + _fmtVal(i, j, dataGrid);
+          var fmt = _fmtVal(i, j, dataGrid);
+          if (includeKeyInDictionary) {
+              if (fmt !== '"FALSE"') {
+                if (j > initialJ) outputText += ', ';
+                outputText += '"' + headerNames[j] + '"' + ":" + fmt;
+              }
+          }
+          else {
+            if (j > initialJ) outputText += ', ';
+            outputText += '"' + headerNames[j] + '"' + ":" + fmt;
+          }
         }
         outputText += '}';
       }
