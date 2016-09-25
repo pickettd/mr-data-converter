@@ -239,30 +239,33 @@ var DataGridRenderer = {
     }
 
     //begin render loop
+    
     outputText += "{" + newLine;
     for (var i = 0; i < numRows; i++) {
-      outputText += indent + '"' + dataGrid[i][0] + '": ';
-      if (numColumns == 2) {
-        outputText += _fmtVal(i, 1, dataGrid);
-      } else {
-        outputText += '{ ';
-        for (var j = initialJ; j < numColumns; j++) {
-          var fmt = _fmtVal(i, j, dataGrid);
-          if (includeKeyInDictionary) {
-              if (fmt !== '"FALSE"') {
-                if (j > initialJ) outputText += ', ';
-                outputText += '"' + headerNames[j] + '"' + ":" + fmt;
-              }
+      if (!includeKeyInDictionary || (includeKeyInDictionary && dataGrid[i][0] !== '')) {
+        outputText += indent + '"' + dataGrid[i][0] + '": ';
+        if (numColumns == 2) {
+          outputText += _fmtVal(i, 1, dataGrid);
+        } else {
+          outputText += '{ ';
+          for (var j = initialJ; j < numColumns; j++) {
+            var fmt = _fmtVal(i, j, dataGrid);
+            if (includeKeyInDictionary) {
+                if (fmt !== '"FALSE"') {
+                  if (j > initialJ) outputText += ', ';
+                  outputText += '"' + headerNames[j] + '"' + ":" + fmt;
+                }
+            }
+            else {
+              if (j > initialJ) outputText += ', ';
+              outputText += '"' + headerNames[j] + '"' + ":" + fmt;
+            }
           }
-          else {
-            if (j > initialJ) outputText += ', ';
-            outputText += '"' + headerNames[j] + '"' + ":" + fmt;
-          }
+          outputText += '}';
         }
-        outputText += '}';
-      }
-      if (i < (numRows - 1)) {
-        outputText += "," + newLine;
+        if (i < (numRows - 1)) {
+          outputText += "," + newLine;
+        }
       }
     }
     outputText += newLine + "}";
